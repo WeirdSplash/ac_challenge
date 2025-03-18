@@ -1,11 +1,15 @@
+terraform {
+  required_version = ">= 1.3.0"
+}
+
 module "networking" {
-  source = "./networking.tf"
+  source = "./"
 }
 
 module "ecs" {
-  source = "./ecs.tf"
+  source = "./"
 }
 
 module "alb" {
-  source = "./alb.tf"
+  source = "./"
 }

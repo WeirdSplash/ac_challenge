@@ -1,20 +1,20 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
-  name = var.ecs_cluster_name
+  name = "ecs-cluster"
 }
 
 resource "aws_ecs_task_definition" "app_task" {
   family                   = "app-task"
   requires_compatibilities = ["EC2"]
-  network_mode             = "bridge"
-  cpu                      = "256"
+  network_mode             = "awsvpc"
   memory                   = "512"
+  cpu                      = "256"
 
   container_definitions = jsonencode([
     {
-      name      = "app-container"
-      image     = "${aws_ecr_repository.app_repo.repository_url}:latest"
-      cpu       = 256
+      name      = "fastapi-app"
+      image     = aws_ecr_repository.app_repo.repository_url
       memory    = 512
+      cpu       = 256
       essential = true
       portMappings = [
         {
@@ -24,11 +24,4 @@ resource "aws_ecs_task_definition" "app_task" {
       ]
     }
   ])
-}
-
-resource "aws_ecs_service" "app_service" {
-  name            = "app-service"
-  cluster         = aws_ecs_cluster.ecs_cluster.id
-  task_definition = aws_ecs_task_definition.app_task.arn
-  desired_count   = 1
 }
