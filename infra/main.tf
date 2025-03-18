@@ -8,10 +8,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = var.aws_region
-}
-
 module "networking" {
   source = "./networking"
 }
